@@ -1,0 +1,16 @@
+{
+  "author": "Lloyd <lloyd@hilaiel.com> (http://lloyd.io)",
+  "name": "ass",
+  "description": "Code coverage that works for multiple cross process.",
+  "version": "0.0.1",
+  "repository": {
+    "url": "https://github.com/lloyd/ass"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "main": "lib/browserid-local-verify",
+  "dependencies": {
+    "blanket": "*"
+  }
+}
