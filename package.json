@@ -9,7 +9,6 @@
   "engines": {
     "node": ">=0.8.0"
   },
-  "main": "lib/browserid-local-verify",
   "dependencies": {
     "blanket": "~1.1.5"
   }
