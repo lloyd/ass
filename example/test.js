@@ -1,5 +1,8 @@
-var ass = require('..').enable(),
-    cp = require('child_process'),
+// For a test author to enable code covergage instrumentation,
+// they make a single call
+var ass = require('..').enable();
+
+var     cp = require('child_process'),
     should = require('should');
 
 describe('a test', function() {
@@ -29,6 +32,9 @@ describe('a test', function() {
   });
 
   it('should aggregate coverage data', function(done) {
+    // at the end of a test run, we can trigger a report.  This will
+    // automatically cause all coverage data from all children processes
+    // to be aggregated into a the report
     ass.report('json', function(err, r) {
       console.log(err, r);
       done(err);
