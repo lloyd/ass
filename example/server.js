@@ -10,6 +10,10 @@ app.get('/goodbye', function(req, res){
 });
 
 server.listen(0, '127.0.0.1', function() {
-  console.log("running on http://" +
-              server.address().address + ":" + server.address().port);
+  var url = 'http://' + server.address().address + ":" + server.address().port;
+  process.send({ url: url });
+});
+
+process.on('SIGTERM', function() {
+  server.close();
 });

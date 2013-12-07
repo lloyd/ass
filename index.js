@@ -31,7 +31,51 @@ module.exports.enable = function() {
   // also for *this* process (the parent), we'll enable blanket
   // so that code coverage occurs here too.
   require('blanket');
+
+  module.exports.collect = function collect(cb) {
+    function mergeCovData(data) {
+      if (!global) global = {};
+      if (!global._$jscoverage) global._$jscoverage = {};
+      data.forEach(function(fdata) {
+        if (!global._$jscoverage[fdata.file]) {
+          global._$jscoverage[fdata.file] = {};
+        }
+        var tgt = global._$jscoverage[fdata.file];
+        if (!tgt.source) {
+          tgt.source = fdata.source;
+        }
+        for (var i = 0; i < tgt.source.length; i++) {
+          if (typeof fdata.hits[i] === 'number') {
+            tgt[i] = (tgt[i] || 0) + fdata.hits[i];
+          } else {
+            tgt[i] = undefined;
+          }
+        }
+      });
+    }
+
+    fs.readdir(process.env[envVar], function(err, files) {
+      files.filter(function(file) { return /\.json$/.test(file); }).forEach(function(f) {
+        var p = path.join(process.env[envVar], f);
+        var data = JSON.parse(fs.readFileSync(p));
+        fs.unlink(p);
+        mergeCovData(data);
+      });
+      cb();
+    });
+  }
+
+  module.exports.report = function(format, cb) {
+    this.collect(function(err) {
+      cb(err);
+    });
+  };
+
+  return this;
 };
+
+
+
 
 // when ass is required and envVar is defined, this is a child process,
 // we must enable blanket and write out coverage data on exit
