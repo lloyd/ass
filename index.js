@@ -1,7 +1,17 @@
 const envVar = "ASS_CODE_COVERAGE";
 
-// ass code coverage is enabled by:
+// basic idea:
+//
+// code coverage turned on with:
 //   require('ass').enable();
+//
+// all spawned processes should:
+//   require('ass');
+//
+// The parent may generate a report when tests are done:
+//  require('ass').report('html', function(err, results) {
+//    console.log(results);
+//  });
 
 // XXX: we should allow the caller to pass in a way to specify
 // which source modules are to be instrumented.
