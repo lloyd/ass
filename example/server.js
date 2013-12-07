@@ -1,3 +1,5 @@
+require('..');
+
 var app = require('express')();
 var server = require('http').createServer(app);
 

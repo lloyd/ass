@@ -6,7 +6,7 @@ describe('a test', function() {
   var kid, url;
 
   it('server should start up', function(done) {
-    kid = cp.fork("./server.js", [], {});
+    kid = cp.fork("./server.js", [], { stdio: 'inherit' });
     kid.on('message', function(msg) {
       (msg).should.be.type('object');
       (msg).should.have.property('url');

@@ -10,6 +10,12 @@ module.exports.enable = function() {
       path  = require('path'),
       fs    = require('fs');
 
+  // XXX: we must figure out how to determine which files to instrument in the
+  // main process
+  function pattern(x) {
+    return true;
+  }
+
   if (process.env[envVar]) {
     throw new Error("code coverage is already enabled");
   }
@@ -30,8 +36,10 @@ module.exports.enable = function() {
 
   // also for *this* process (the parent), we'll enable blanket
   // so that code coverage occurs here too.
-  require('blanket');
+  require('blanket')({ pattern: pattern }); // XXX: select which source to analyze
 
+  // once enabled, we have the ability to "collect" stats and merge them into the
+  // parent's coverage state
   module.exports.collect = function collect(cb) {
     function mergeCovData(data) {
       if (!global) global = {};
@@ -67,20 +75,37 @@ module.exports.enable = function() {
 
   module.exports.report = function(format, cb) {
     this.collect(function(err) {
-      cb(err);
+      if (err) {
+        return cb(err);
+      }
+
+      try {
+        var reporter = require(path.join(__dirname, 'lib', 'reporters', format));
+      } catch(e) {
+        throw new Error('No such format: ' + format);
+      }
+
+      cb(err, reporter(global._$jscoverage));
     });
   };
 
   return this;
 };
 
-
-
-
 // when ass is required and envVar is defined, this is a child process,
 // we must enable blanket and write out coverage data on exit
 if (process.env[envVar]) {
-  require('blanket');
+  var fs = require('fs'),
+      path = require('path'),
+      util = require('util');
+
+  // XXX: we must figure out how to determine which files to instrument in the child
+  // process
+  function pattern(f) {
+    return false;
+  }
+
+  require('blanket')({ pattern: pattern });  // XXX: select which source to analyze
 
   process.on('exit', function() {
     var jsonCovData = require('./lib/serialize.js')();
