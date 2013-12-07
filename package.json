@@ -10,6 +10,8 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
-    "blanket": "~1.1.5"
+    "blanket": "~1.1.5",
+    "temp": "~0.6.0",
+    "async": "~0.2.9"
   }
 }
