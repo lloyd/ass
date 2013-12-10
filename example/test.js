@@ -3,7 +3,8 @@
 var ass = require('..').enable();
 
 var     cp = require('child_process'),
-    should = require('should');
+    should = require('should'),
+        fs = require('fs');
 
 describe('a test', function() {
   var kid, url;
@@ -36,8 +37,11 @@ describe('a test', function() {
     // automatically cause all coverage data from all children processes
     // to be aggregated into a the report
     ass.report('json', function(err, r) {
-      console.log(err, r);
-      done(err);
+      console.log("code coverage:", r.percent + "%");
+      ass.report('html', function(err, r) {
+        fs.writeFileSync('coverage.html', r);
+        done(err);
+      });
     });
   });
 });
