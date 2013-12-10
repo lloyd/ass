@@ -12,6 +12,7 @@
   "dependencies": {
     "blanket": "~1.1.5",
     "temp": "~0.6.0",
-    "async": "~0.2.9"
+    "async": "~0.2.9",
+    "cheerio": "~0.12.4"
   }
 }
