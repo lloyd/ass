@@ -1,6 +1,6 @@
 // For a test author to enable code covergage instrumentation,
 // they make a single call
-var ass = require('..').enable();
+var ass = require('..').enable(__dirname + "/server.js");
 
 var     cp = require('child_process'),
     should = require('should'),
