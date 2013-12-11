@@ -15,16 +15,12 @@ const envVar = "ASS_CODE_COVERAGE";
 
 // XXX: we should allow the caller to pass in a way to specify
 // which source modules are to be instrumented.
-module.exports.enable = function() {
+module.exports.enable = function(match) {
   var temp  = require('temp'),
       path  = require('path'),
       fs    = require('fs');
 
-  // XXX: we must figure out how to determine which files to instrument in the
-  // main process
-  function pattern(x) {
-    return true;
-  }
+
 
   if (process.env[envVar]) {
     throw new Error("code coverage is already enabled");
@@ -46,7 +42,7 @@ module.exports.enable = function() {
 
   // also for *this* process (the parent), we'll enable blanket
   // so that code coverage occurs here too.
-  require('blanket')({ pattern: pattern }); // XXX: select which source to analyze
+  require('blanket')({ pattern: match });
 
   // once enabled, we have the ability to "collect" stats and merge them into the
   // parent's coverage state
@@ -112,7 +108,7 @@ if (process.env[envVar]) {
   // XXX: we must figure out how to determine which files to instrument in the child
   // process
   function pattern(f) {
-    return false;
+    return /server.js$/.test(f);
   }
 
   require('blanket')({ pattern: pattern });  // XXX: select which source to analyze
@@ -122,8 +118,7 @@ if (process.env[envVar]) {
 
     // now write synchronously (we're at exit and cannot use async code because
     // "The main event loop will no longer be run after the 'exit' callback")
-    fs.writeFileSync(path.join(process.env[envVar],
-                               util.format("%d.json", process.pid)),
-                     jsonCovData);
+    var tgt = path.join(process.env[envVar], util.format("%d.json", process.pid));
+    fs.writeFileSync(tgt, jsonCovData);
   });
 }
