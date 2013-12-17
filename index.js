@@ -43,13 +43,17 @@ module.exports.enable = function(options) {
   process.env[envVar] = JSON.stringify(context);
 
   process.on('exit', function() {
-    // synchronously delete all data files at process exit.
-    fs.readdirSync(context.dir).forEach(function(f) {
-      if (f.indexOf('.') !== 0) {
-        fs.unlink(f);
-      }
-    });
-    fs.rmdirSync(context.dir);
+    try {
+      // synchronously delete all data files at process exit.
+      fs.readdirSync(context.dir).forEach(function(f) {
+        if (f.indexOf('.') !== 0) {
+          fs.unlink(f);
+        }
+      });
+      fs.rmdirSync(context.dir);
+    } catch(e) {
+      // can't clean up our mess!  oh well.
+    }
   });
 
   // also for *this* process (the parent), we'll enable blanket
