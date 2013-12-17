@@ -38,9 +38,11 @@ module.exports.enable = function(options) {
   process.env[envVar] = JSON.stringify(context);
 
   process.on('exit', function() {
-    // XXX we should synchronously delete all of the .json files and
-    // the coverage data directory.  temp has delete-on-exit functionality
-    // but it's non-recursive.
+    // synchronously delete all data files at process exit.
+    fs.readdirSync(context.dir).forEach(function(f) {
+      if (f.indexOf('.') != 0) fs.unlink(f);
+    });
+    fs.rmdirSync(context.dir);
   });
 
   // also for *this* process (the parent), we'll enable blanket
