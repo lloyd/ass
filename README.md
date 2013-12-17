@@ -1,13 +1,13 @@
-status: **experimental**
+status: **experimental** (there's no way this fragile approach will ever work, run away)
 
 ## **Ass**: Cross Process Code Coverage
 
 `ass` is a small node.js code coverage library:
 
-* *dynamic instrumentation*: no pre-compilation step required
-* *minimal instrumentation*: add a couple lines and go
-* *multiple process support*: coverage data from instrumented sub-processes will be aggregated into a single report
-* *different report formats*: basic reporting functionality built in
+* **dynamic instrumentation**: no pre-compilation step required
+* **minimal instrumentation**: add a couple lines and go
+* **multiple process support**: coverage data from instrumented sub-processes will be aggregated into a single report
+* **different report formats**: basic reporting functionality built in
 
 ## Theory
 
@@ -24,8 +24,8 @@ To get started with ass, first install it:
     npm install --save-dev ass
 
 Then instrument processes that are run by your test harness by adding a
-single "stub" file (say your original server was in 'server.js', let's assume
-you name the stub 'stub.js'):
+single "stub" file (say your original server was in `server.js`, let's assume
+you name the stub `stub.js`):
 
     require('ass');
     require('./server.js');
@@ -49,3 +49,12 @@ A full example of code coverage is available:
     $ npm install
     $ npm test
     $ open coverage.html
+
+## License
+
+MIT
+
+## Credits
+
+The design of the html reporter was lifted from [TJ Holowaychuk](https://twitter.com/tjholowaychuk)'s fantastic
+[mocha test framework](http://visionmedia.github.io/mocha/).
