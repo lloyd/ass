@@ -1,3 +1,6 @@
+v0.0.4:
+	* clean up data files in temp dir at process exit
+
 v0.0.3:
 	* exclusion pattern support
 
