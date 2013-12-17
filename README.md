@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/lloyd/ass.png)](https://travis-ci.org/lloyd/ass)
+
 status: **experimental** (there's no way this fragile approach will ever work, run away)
 
 ## **Ass**: Cross Process Code Coverage
