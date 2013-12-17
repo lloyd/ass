@@ -2,11 +2,11 @@ status: **experimental** (there's no way this fragile approach will ever work, r
 
 ## **Ass**: Cross Process Code Coverage
 
-`ass` is a small node.js code coverage library:
+`ass` is a small node.js code coverage library with the following features:
 
-* **dynamic instrumentation**: no pre-compilation step required
-* **minimal instrumentation**: add a couple lines and go
-* **multiple process support**: coverage data from instrumented sub-processes will be aggregated into a single report
+* **dynamic instrumentation**: code is instrumented on the fly
+* **minimal setup**: get code coverage reports with minimal impact on your project
+* **multiple process support**: coverage data from multiple processes is aggregated into a single report
 * **different report formats**: basic reporting functionality built in
 
 ## Theory
@@ -14,8 +14,8 @@ status: **experimental** (there's no way this fragile approach will ever work, r
 The philosophy behind `ass` is that implementing code coverage should
 be a trivial process.  That no pre or post processing should be
 required.  That the code coverage library should itself handle
-reporting (not require support from your test framework).  That code
-coverage data should be programatically accessible.
+reporting (not require support from your test framework).  And
+finally, that code coverage data should be programatically accessible.
 
 ## Practice
 
