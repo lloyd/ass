@@ -4,13 +4,14 @@ var ass = require('..').enable(__dirname + "/server.js");
 
 var     cp = require('child_process'),
     should = require('should'),
-        fs = require('fs');
+        fs = require('fs'),
+   request = require('request');
 
 describe('a test', function() {
   var kid, url;
 
   it('server should start up', function(done) {
-    kid = cp.fork("./server.js", [], { stdio: 'inherit' });
+    kid = cp.fork("./stub.js", [], { stdio: 'inherit' });
     kid.on('message', function(msg) {
       (msg).should.be.type('object');
       (msg).should.have.property('url');
@@ -24,6 +25,16 @@ describe('a test', function() {
     });
   });
 
+  it('server should respond to hello', function(done) {
+    request(url + '/hello', function(error, response, body) {
+      should.not.exist(error);
+      (response.statusCode).should.equal(200);
+      (body).should.equal('Hello World');
+      done();
+    });
+  });
+
+
   it('server should shut down', function(done) {
     kid.kill();
     kid.on('exit', function(code, signal) {
@@ -32,16 +43,21 @@ describe('a test', function() {
     });
   });
 
-  it('should aggregate coverage data', function(done) {
-    // at the end of a test run, we can trigger a report.  This will
-    // automatically cause all coverage data from all children processes
-    // to be aggregated into a the report
+  it('code coverage should exceed 90%', function(done) {
     ass.report('json', function(err, r) {
-      console.log("code coverage:", r.percent + "%");
-      ass.report('html', function(err, r) {
+      (r.percent).should.be.above(80.0);
+      done(err);
+    });
+  });
+
+  it('coverage.html should be written', function(done) {
+    ass.report('html', function(err, r) {
+      try {
         fs.writeFileSync('coverage.html', r);
-        done(err);
-      });
+      } catch (e) {
+        if (!err) err = e;
+      }
+      done(err);
     });
   });
 });

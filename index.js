@@ -20,8 +20,6 @@ module.exports.enable = function(match) {
       path  = require('path'),
       fs    = require('fs');
 
-
-
   if (process.env[envVar]) {
     throw new Error("code coverage is already enabled");
   }
@@ -30,8 +28,6 @@ module.exports.enable = function(match) {
   // specified in the environemnt (envVar at the top of this file).
 
   // convey the directory to child processes
-  // XXX: currently we store in a temp directory, but we could change
-  // this...
   process.env[envVar] = temp.mkdirSync("ass-coverage-data");
 
   process.on('exit', function() {
@@ -52,7 +48,7 @@ module.exports.enable = function(match) {
       if (!global._$jscoverage) global._$jscoverage = {};
       data.forEach(function(fdata) {
         if (!global._$jscoverage[fdata.file]) {
-          global._$jscoverage[fdata.file] = {};
+          global._$jscoverage[fdata.file] = [];
         }
         var tgt = global._$jscoverage[fdata.file];
         if (!tgt.source) {

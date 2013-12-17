@@ -9,6 +9,9 @@
     "should": "~2.1.0"
   },
   "scripts": {
-    "test": "mocha test.js"
+    "test": "mocha -R spec test.js"
+  },
+  "devDependencies": {
+    "request": "~2.30.0"
   }
 }
