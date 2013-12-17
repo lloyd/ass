@@ -20,7 +20,9 @@ module.exports.enable = function(options) {
       path  = require('path'),
       fs    = require('fs');
 
-  if (!options) options = {};
+  if (!options) {
+    options = {};
+  }
 
   if (process.env[envVar]) {
     throw new Error("code coverage is already enabled");
@@ -33,14 +35,19 @@ module.exports.enable = function(options) {
   var context = {
     dir: temp.mkdirSync("ass-coverage-data")
   };
-  if (options.exclude) context.exclude = options.exclude;
+  if (options.exclude) {
+    context.exclude = options.exclude;
+  }
+
   // pass context to child processes
   process.env[envVar] = JSON.stringify(context);
 
   process.on('exit', function() {
     // synchronously delete all data files at process exit.
     fs.readdirSync(context.dir).forEach(function(f) {
-      if (f.indexOf('.') != 0) fs.unlink(f);
+      if (f.indexOf('.') !== 0) {
+        fs.unlink(f);
+      }
     });
     fs.rmdirSync(context.dir);
   });
@@ -55,8 +62,9 @@ module.exports.enable = function(options) {
   // once enabled, we have the ability to "collect" stats and merge them into the
   // parent's coverage state
   module.exports.collect = function collect(cb) {
-    if (!global) global = {};
-    if (!global._$jscoverage) global._$jscoverage = {};
+    if (!global._$jscoverage) {
+      global._$jscoverage = {};
+    }
 
     function mergeCovData(data) {
       data.forEach(function(fdata) {
@@ -78,7 +86,9 @@ module.exports.enable = function(options) {
     }
 
     fs.readdir(context.dir, function(err, files) {
-      files.filter(function(file) { return /\.json$/.test(file); }).forEach(function(f) {
+      files.filter(function(file) {
+        return (/\.json$/).test(file);
+      }).forEach(function(f) {
         var p = path.join(context.dir, f);
         var data = JSON.parse(fs.readFileSync(p));
         fs.unlink(p);
@@ -86,7 +96,7 @@ module.exports.enable = function(options) {
       });
       cb();
     });
-  }
+  };
 
   module.exports.report = function(format, cb) {
     this.collect(function(err) {
@@ -94,8 +104,9 @@ module.exports.enable = function(options) {
         return cb(err);
       }
 
+      var reporter;
       try {
-        var reporter = require(path.join(__dirname, 'lib', 'reporters', format));
+        reporter = require(path.join(__dirname, 'lib', 'reporters', format));
       } catch(e) {
         throw new Error('No such format: ' + format + ": " + e);
       }
