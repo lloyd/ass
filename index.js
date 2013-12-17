@@ -13,9 +13,9 @@ const envVar = "ASS_CODE_COVERAGE";
 //    console.log(results);
 //  });
 
-// XXX: we should allow the caller to pass in a way to specify
-// which source modules are to be instrumented.
-module.exports.enable = function(match) {
+// XXX: we should allow the caller to over-ride default file
+// selection.
+module.exports.enable = function() {
   var temp  = require('temp'),
       path  = require('path'),
       fs    = require('fs');
@@ -25,7 +25,7 @@ module.exports.enable = function(match) {
   }
 
   // Note: code coverage support is indicated via a directory
-  // specified in the environemnt (envVar at the top of this file).
+  // specified in the environment (envVar at the top of this file).
 
   // convey the directory to child processes
   process.env[envVar] = temp.mkdirSync("ass-coverage-data");
@@ -38,14 +38,17 @@ module.exports.enable = function(match) {
 
   // also for *this* process (the parent), we'll enable blanket
   // so that code coverage occurs here too.
-  require('blanket')({ pattern: match });
+  require('blanket')({
+    pattern: require('./lib/default-match')
+  });
 
   // once enabled, we have the ability to "collect" stats and merge them into the
   // parent's coverage state
   module.exports.collect = function collect(cb) {
+    if (!global) global = {};
+    if (!global._$jscoverage) global._$jscoverage = {};
+
     function mergeCovData(data) {
-      if (!global) global = {};
-      if (!global._$jscoverage) global._$jscoverage = {};
       data.forEach(function(fdata) {
         if (!global._$jscoverage[fdata.file]) {
           global._$jscoverage[fdata.file] = [];
@@ -84,7 +87,7 @@ module.exports.enable = function(match) {
       try {
         var reporter = require(path.join(__dirname, 'lib', 'reporters', format));
       } catch(e) {
-        throw new Error('No such format: ' + format);
+        throw new Error('No such format: ' + format + ": " + e);
       }
 
       cb(err, reporter(global._$jscoverage));
@@ -101,13 +104,9 @@ if (process.env[envVar]) {
       path = require('path'),
       util = require('util');
 
-  // XXX: we must figure out how to determine which files to instrument in the child
-  // process
-  function pattern(f) {
-    return /server.js$/.test(f);
-  }
-
-  require('blanket')({ pattern: pattern });  // XXX: select which source to analyze
+  require('blanket')({
+    pattern: require('./lib/default-match') // XXX: allow client to over-ride
+  });
 
   process.on('exit', function() {
     var jsonCovData = require('./lib/serialize.js')();

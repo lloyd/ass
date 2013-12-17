@@ -1,6 +1,6 @@
 // For a test author to enable code covergage instrumentation,
 // they make a single call
-var ass = require('..').enable(__dirname + "/server.js");
+var ass = require('ass').enable();
 
 var     cp = require('child_process'),
     should = require('should'),
@@ -45,7 +45,7 @@ describe('a test', function() {
 
   it('code coverage should exceed 90%', function(done) {
     ass.report('json', function(err, r) {
-      (r.percent).should.be.above(80.0);
+      (r.percent).should.be.above(90.0);
       done(err);
     });
   });

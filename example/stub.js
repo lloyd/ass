@@ -1,4 +1,4 @@
 // To support code coverage, node.js processes being tested simply
 // include 'ass'.
-require('..');
+require('ass');
 require('./server');
