@@ -15,10 +15,12 @@ const envVar = "ASS_CODE_COVERAGE";
 
 // XXX: we should allow the caller to over-ride default file
 // selection.
-module.exports.enable = function() {
+module.exports.enable = function(options) {
   var temp  = require('temp'),
       path  = require('path'),
       fs    = require('fs');
+
+  if (!options) options = {};
 
   if (process.env[envVar]) {
     throw new Error("code coverage is already enabled");
@@ -28,7 +30,12 @@ module.exports.enable = function() {
   // specified in the environment (envVar at the top of this file).
 
   // convey the directory to child processes
-  process.env[envVar] = temp.mkdirSync("ass-coverage-data");
+  var context = {
+    dir: temp.mkdirSync("ass-coverage-data")
+  };
+  if (options.exclude) context.exclude = options.exclude;
+  // pass context to child processes
+  process.env[envVar] = JSON.stringify(context);
 
   process.on('exit', function() {
     // XXX we should synchronously delete all of the .json files and
@@ -39,7 +46,8 @@ module.exports.enable = function() {
   // also for *this* process (the parent), we'll enable blanket
   // so that code coverage occurs here too.
   require('blanket')({
-    pattern: require('./lib/default-match')
+    pattern: require('./lib/default-match'),
+    'data-cover-never': options.exclude
   });
 
   // once enabled, we have the ability to "collect" stats and merge them into the
@@ -67,9 +75,9 @@ module.exports.enable = function() {
       });
     }
 
-    fs.readdir(process.env[envVar], function(err, files) {
+    fs.readdir(context.dir, function(err, files) {
       files.filter(function(file) { return /\.json$/.test(file); }).forEach(function(f) {
-        var p = path.join(process.env[envVar], f);
+        var p = path.join(context.dir, f);
         var data = JSON.parse(fs.readFileSync(p));
         fs.unlink(p);
         mergeCovData(data);
@@ -100,12 +108,15 @@ module.exports.enable = function() {
 // when ass is required and envVar is defined, this is a child process,
 // we must enable blanket and write out coverage data on exit
 if (process.env[envVar]) {
+  var context = JSON.parse(process.env[envVar]);
+
   var fs = require('fs'),
       path = require('path'),
       util = require('util');
 
   require('blanket')({
-    pattern: require('./lib/default-match') // XXX: allow client to over-ride
+    pattern: require('./lib/default-match'),
+    'data-cover-never': context.exclude
   });
 
   process.on('exit', function() {
@@ -113,7 +124,7 @@ if (process.env[envVar]) {
 
     // now write synchronously (we're at exit and cannot use async code because
     // "The main event loop will no longer be run after the 'exit' callback")
-    var tgt = path.join(process.env[envVar], util.format("%d.json", process.pid));
+    var tgt = path.join(context.dir, util.format("%d.json", process.pid));
     fs.writeFileSync(tgt, jsonCovData);
   });
 }
