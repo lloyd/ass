@@ -13,8 +13,6 @@ const envVar = "ASS_CODE_COVERAGE";
 //    console.log(results);
 //  });
 
-// XXX: we should allow the caller to over-ride default file
-// selection.
 module.exports.enable = function(options) {
   var temp  = require('temp'),
       path  = require('path'),
