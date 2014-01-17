@@ -58,7 +58,7 @@ MIT
 
 ## Credits
 
-The infamous [Zaach Carter](http://github.com/zaach) created our fantastic logo.
+The infamous [Zach Carter](http://github.com/zaach) created our fantastic logo.
 
 The design of the html reporter was lifted from [TJ Holowaychuk](https://twitter.com/tjholowaychuk)'s fantastic
 [mocha test framework](http://visionmedia.github.io/mocha/).
