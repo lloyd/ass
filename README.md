@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/lloyd/ass.png)](https://travis-ci.org/lloyd/ass)
 
-status: **experimental** (there's no way this fragile approach will ever work, run away)
+-> ![What kind of ass?](donkey.png) <-
 
 ## **Ass**: Cross Process Code Coverage
 
@@ -57,6 +57,8 @@ A full example of code coverage is available:
 MIT
 
 ## Credits
+
+The infamous [Zaach Carter](http://github.com/zaach) created our fantastic logo.
 
 The design of the html reporter was lifted from [TJ Holowaychuk](https://twitter.com/tjholowaychuk)'s fantastic
 [mocha test framework](http://visionmedia.github.io/mocha/).
