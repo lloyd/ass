@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/lloyd/ass.png)](https://travis-ci.org/lloyd/ass)
 
--> ![What kind of ass?](donkey.png) <-
+<center>![What kind of ass?](donkey.png)</center>
 
 ## **Ass**: Cross Process Code Coverage
 
