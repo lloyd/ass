@@ -113,7 +113,9 @@ module.exports.enable = function(options) {
         throw new Error('No such format: ' + format + ": " + e);
       }
 
-      cb(err, reporter(global._$jscoverage));
+      reporter(global._$jscoverage, function(res) {
+        cb(err, res);
+      });
     });
   };
 
