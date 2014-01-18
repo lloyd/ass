@@ -60,4 +60,15 @@ describe('a test', function() {
       done(err);
     });
   });
+
+  it('coverage.svg should be written', function(done) {
+    ass.report('svg', function(err, r) {
+      try {
+        fs.writeFileSync('coverage.svg', r);
+      } catch (e) {
+        if (!err) err = e;
+      }
+      done(err);
+    });
+  });
 });
