@@ -1,4 +1,6 @@
 v0.0.5:
+	* SVG reported creates a badge of coverage (awesome @espadrine!)
+	* fix issue #3 - simultaneous invocation of multiple reporters
 	* html reporter only displays unique portion of filename path
 
 v0.0.4:
