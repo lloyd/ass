@@ -63,7 +63,16 @@ module.exports.enable = function(options) {
 
   // once enabled, we have the ability to "collect" stats and merge them into the
   // parent's coverage state
+  var collecting = null;
   module.exports.collect = function collect(cb) {
+    // ensure there's only one collection process running at a time
+    if (collecting) {
+      collecting.push(cb);
+      return;
+    } else {
+      collecting = [ cb ];
+    }
+
     if (!global._$jscoverage) {
       global._$jscoverage = {};
     }
@@ -96,7 +105,11 @@ module.exports.enable = function(options) {
         fs.unlink(p);
         mergeCovData(data);
       });
-      cb();
+      var callbacks = collecting;
+      collecting = null;
+      callbacks.forEach(function(cb) {
+        cb(null);
+      });
     });
   };
 
