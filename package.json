@@ -2,7 +2,7 @@
   "author": "Lloyd <lloyd@hilaiel.com> (http://lloyd.io)",
   "name": "ass",
   "description": "A flexible node code coverage library with multiple-process support.",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "repository": {
     "url": "https://github.com/lloyd/ass"
   },
@@ -13,14 +13,16 @@
     "blanket": "~1.1.5",
     "temp": "~0.6.0",
     "async": "~0.2.9",
-    "cheerio": "~0.12.4",
-    "gh-badges": "~0.2.1"
+    "cheerio": "~0.12.4"
   },
   "devDependencies": {
     "mocha": "1.15.1",
     "should": "2.1.1",
     "jshint": "2.3.0",
     "walk": "~2.2.1"
+  },
+  "optionalDependencies": {
+    "gh-badges": "~0.2.1"
   },
   "scripts": {
     "test": "mocha -R spec tests/*.js"
