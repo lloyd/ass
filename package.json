@@ -10,10 +10,10 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
-    "blanket": "~1.1.5",
-    "temp": "~0.6.0",
-    "async": "~0.2.9",
-    "cheerio": "~0.12.4",
+    "async": "0.9.0",
+    "blanket": "1.1.6",
+    "temp": "0.8.1",
+    "cheerio": "0.14.0",
     "gh-badges": "~0.2.1"
   },
   "devDependencies": {
