@@ -17,10 +17,10 @@
     "gh-badges": "~1.0.0"
   },
   "devDependencies": {
-    "mocha": "1.15.1",
-    "should": "2.1.1",
-    "jshint": "2.3.0",
-    "walk": "~2.2.1"
+    "mocha": "~1.21.4",
+    "should": "~4.0.4",
+    "jshint": "~2.5.5",
+    "walk": "~2.3.3"
   },
   "scripts": {
     "test": "mocha -R spec tests/*.js"
